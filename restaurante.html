@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor Brasil - Restaurante Autêntico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+            to { text-shadow: 2px 2px 15px rgba(255,255,255,0.5); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23228B22" width="1200" height="800"/><circle fill="%23FFD700" cx="600" cy="400" r="300" opacity="0.3"/><rect fill="%23FF6B35" x="0" y="700" width="1200" height="100"/></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #FFD700, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s ease-in-out infinite;
+        }
+
+        @keyframes textShine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #FF6B35, #FFD700);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 120px 5% 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #FF6B35, #228B22);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #FF6B35, #FFD700);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* Gallery Grid */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .dish-card, .drink-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dish-card:hover, .drink-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #FF6B35, #FFD700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .card-content p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #FF6B35;
+            margin-top: 1rem;
+        }
+
+        /* Quality Section */
+        .quality-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 4rem 5%;
+            margin: 3rem -5%;
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        .quality-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .quality-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature h3 {
+            margin-bottom: 1rem;
+            color: #FF6B35;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: linear-gradient(135deg, #ff6b35, #f7931e);
+                flex-direction: column;
+                justify-content: start;
+                align-items: center;
+                padding-top: 2rem;
+                transition: left 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .quality-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Floating Animation */
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Background Animations */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .bg-circle:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            background: #FF6B35;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bg-circle:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            background: #FFD700;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .bg-circle:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            background: #228B22;
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo">🇧🇷 Sabor Brasil</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" onclick="showPage('home')" class="active">Início</a></li>
+                <li><a href="#" onclick="showPage('pratos')">Pratos</a></li>
+                <li><a href="#" onclick="showPage('bebidas')">Bebidas</a></li>
+                <li><a href="#" onclick="showPage('contato')">Contato</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="float">Sabor Brasil</h1>
+                <p>Experiência gastronômica autêntica com ingredientes frescos e serviço excepcional</p>
+                <a href="#" onclick="showPage('pratos')" class="cta-button">Descubra Nossos Pratos</a>
+            </div>
+        </section>
+
+        <section class="quality-section">
+            <h2 class="quality-title">Por que escolher o Sabor Brasil?</h2>
+            <div class="quality-features">
+                <div class="feature">
+                    <span class="feature-icon">👨‍🍳</span>
+                    <h3>Chefs Especializados</h3>
+                    <p>Nossa equipe de chefs possui mais de 20 anos de experiência na culinária brasileira autêntica.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🌱</span>
+                    <h3>Ingredientes Frescos</h3>
+                    <p>Utilizamos apenas ingredientes selecionados e frescos, muitos deles vindos diretamente do Brasil.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">⭐</span>
+                    <h3>Atendimento 5 Estrelas</h3>
+                    <p>Nossa equipe está sempre pronta para proporcionar uma experiência inesquecível a cada visita.</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">🎵</span>
+                    <h3>Ambiente Acolhedor</h3>
+                    <p>Música brasileira ao vivo, decoração autêntica e atmosfera calorosa como no Brasil.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Pratos Page -->
+    <div id="pratos" class="page">
+        <h2 class="page-title">Nossos Pratos Tradicionais</h2>
+        <div class="gallery">
+            <div class="dish-card">
+                <div class="card-image"><img src="imgs/feijoada.jfif" alt=""></div>
+                <div class="card-content">
+                    <h3>Feijoada Completa</h3>
+                    <p>O prato mais tradicional do Brasil, preparado com carnes nobres, linguiças artesanais e feijão preto cozido lentamente por horas.</p>
+                    <div class="price">R$ 45,90</div>
+                </div>
+            </div>
+            <div class="dish-card">
+                <div class="card-image"><img src="imgs/picanha.jfif" alt=""></div>
+                <div class="card-content">
+                    <h3>Picanha na Brasa</h3>
+                    <p>Corte nobre grelhado no ponto perfeito, acompanhada de farofa especial, vinagrete e pão de alho.</p>
+                    <div class="price">R$ 52,90</div>
+                </div>
+            </div>
+            <div class="dish-card">
+                <div class="card-image"><img src="imgs/moqueca.jfif" alt=""></div>
+                <div class="card-content">
+                    <h3>Moqueca de Peixe</h3>
+                    <p>Peixe fresco cozido no leite de coco com dendê, pimentões e temperos baianos. Servida com pirão.</p>
+                    <div class="price">R$ 38,90</div>
+                </div>
+            </div>
+            <div class="dish-card">
+                <div class="card-image"><img src="imgs/frango.jfif" alt=""></div>
+                <div class="card-content">
+                    <h3>Frango à Passarinho</h3>
+                    <p>Pedaços suculentos de frango temperados com alho e ervas, fritos até ficarem dourados e crocantes.</p>
+                    <div class="price">R$ 28,90</div>
+                </div>
+            </div>
+            <div class="dish-card">
+                <div class="card-image"><img src="imgs/baião.jfif" alt=""></div>
+                <div class="card-content">
+                    <h3>Baião de Dois</h3>
+                    <p>Arroz e feijão refogados com linguiça calabresa, bacon, queijo coalho e temperos nordestinos.</p>
+                    <div class="price">R$ 32,90</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quality-section">
+            <h2 class="quality-title">Qualidade em Cada Prato</h2>
+            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto; color: #666;">
+                Todos os nossos pratos são preparados na hora com receitas tradicionais passadas de geração em geração. 
+                Utilizamos técnicas culinárias autênticas e ingredientes selecionados para garantir o sabor genuíno da culinária brasileira.
+            </p>
+        </div>
+    </div>
+
+    <!-- Bebidas Page -->
+    <div id="bebidas" class="page">
+        <h2 class="page-title">Bebidas Tradicionais</h2>
+        <div class="gallery">
+            <div class="drink-card">
+                <div class="card-image"><img src="imgs/caipirinha.jfif" alt=""></div>
+                <div class="card-content">
+                    <h3>Caipirinha Original</h3>
+                    <p>A bebida símbolo do Brasil! Cachaça artesanal, limão fresco, açúcar e muito gelo. Refrescante e autêntica.</p>
+                    <div class="price">R$ 12,90</div>
+                </div>
+            </div>
+            <div class="drink-card">
+                <div class="card-image"><img src="imgs/batida.jfif" alt=""></div>
+                <div class="card-content">
+                    <h3>Batida de Coco</h3>
+                    <p>Cachaça premium misturada com leite de coco cremoso e leite condensado. Uma explosão tropical de sabores.</p>
+                    <div class="price">R$ 15,90</div>
+                </div>
+            </div>
+            <div class="drink-card">
+                <div class="card-image"><img src="imgs/aguacoco.jfif" alt=""></div>
+                <div class="card-content">
+                    <h3>Água de Coco Gelada</h3>
+                    <p>Diretamente do coco verde, servida bem gelada. Hidratante natural e refrescante, perfeita para o calor.</p>
+                    <div class="price">R$ 8,90</div>
+                </div>
+            </div>
+            <div class="drink-card">
+                <div class="card-image"><img src="imgs/cafe.jfif" alt=""></div>
+                <div class="card-content">
+                    <h3>Café Brasileiro</h3>
+                    <p>Café especial torrado e moído na hora, servido quentinho como manda a tradição brasileira.</p>
+                    <div class="price">R$ 6,90</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quality-section">
+            <h2 class="quality-title">Bebidas Premium</h2>
+            <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto; color: #666;">
+                Nossas bebidas são preparadas com cachaças artesanais selecionadas e frutas frescas. 
+                Cada caipirinha é feita individualmente, garantindo o equilíbrio perfeito entre sabor e tradição. 
+                Temos também opções sem álcool para toda a família.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Close mobile menu
+            document.getElementById('navLinks').classList.remove('active');
+        }
+
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const nav = document.querySelector('nav');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (!nav.contains(event.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Smooth scroll effect on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'linear-gradient(135deg, rgba(255, 107, 53, 0.95), rgba(247, 147, 30, 0.95))';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #ff6b35, #f7931e)';
+                header.style.backdropFilter = 'none';
+            }
+        });
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>

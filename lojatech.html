@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechStore - Sua Loja de Tecnologia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #fff;
+            color: #ff6b6b;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f2f5, #e4e9f0);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 4rem;
+            color: #666;
+        }
+
+        .product-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 15px;
+            min-height: 50px;
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .cart-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .cart-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            padding: 5px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: #666;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 15px;
+        }
+
+        .quantity-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .quantity {
+            font-weight: bold;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .remove-item {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .cart-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            text-align: center;
+        }
+
+        .total-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .product-card {
+                padding: 20px;
+            }
+
+            .cart-content {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .cart-item {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .product-image {
+                height: 150px;
+                font-size: 3rem;
+            }
+
+            .product-price {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🚀 TechStore</div>
+            <button class="cart-button" onclick="toggleCart()">
+                🛒 Carrinho
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </header>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image"><img src="imgs/Console PlayStation® 5 Slim.webp" alt=""></div>
+                <div class="product-description">PlayStation 5 Slim Edição Digital 2024 1TB - 1 Controle Branco Sony com 2 Jogos</div>
+                <div class="product-price">R$ 2.999,00</div>
+                <button class="add-to-cart" onclick="addToCart('Smartphone Ultra Pro', 2999, '📱')">Adicionar ao Carrinho</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="imgs/Sony PlayStation 4 Pro.webp" alt=""></div>
+                <div class="product-description">Notebook Gamer com processador Intel i7, 16GB RAM e placa de vídeo RTX 4060</div>
+                <div class="product-price">R$ 4.599,00</div>
+                <button class="add-to-cart" onclick="addToCart('Notebook Gamer', 4599, '💻')">Adicionar ao Carrinho</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="imgs/Microfone pc 2.webp" alt=""></div>
+                <div class="product-description">Fone de Ouvido Bluetooth com cancelamento de ruído ativo e 30h de autonomia</div>
+                <div class="product-price">R$ 899,00</div>
+                <button class="add-to-cart" onclick="addToCart('Fone Bluetooth Pro', 899, '🎧')">Adicionar ao Carrinho</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="imgs/kit memoria ram ddr5 2.webp" alt=""></div>
+                <div class="product-description">Smartwatch com GPS, monitor cardíaco e resistência à água até 50 metros</div>
+                <div class="product-price">R$ 1.299,00</div>
+                <button class="add-to-cart" onclick="addToCart('Smartwatch GPS', 1299, '⌚')">Adicionar ao Carrinho</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="imgs/Monitor Gamer LG UltraGear 24”.webp" alt=""></div>
+                <div class="product-description">Câmera Mirrorless 4K com lente 24-70mm e estabilização de imagem profissional</div>
+                <div class="product-price">R$ 3.799,00</div>
+                <button class="add-to-cart" onclick="addToCart('Câmera Mirrorless 4K', 3799, '📷')">Adicionar ao Carrinho</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="imgs/MSI GeForce RTX 3050.webp" alt=""></div>
+                <div class="product-description">Monitor 4K UltraWide 34" com HDR10 e taxa de atualização de 144Hz para games</div>
+                <div class="product-price">R$ 2.199,00</div>
+                <button class="add-to-cart" onclick="addToCart('Monitor 4K UltraWide', 2199, '🖥️')">Adicionar ao Carrinho</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="imgs/SSD Kingston 1TB Nv3 1.webp" alt=""></div>
+                <div class="product-description">Console de Videogame Next-Gen com SSD de 1TB e suporte a jogos em 4K/120fps</div>
+                <div class="product-price">R$ 2.699,00</div>
+                <button class="add-to-cart" onclick="addToCart('Console Next-Gen', 2699, '🎮')">Adicionar ao Carrinho</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="imgs/ssd ddr4.webp" alt=""></div>
+                <div class="product-description">Carregador Sem Fio Fast Charge 15W compatível com todos os smartphones modernos</div>
+                <div class="product-price">R$ 199,00</div>
+                <button class="add-to-cart" onclick="addToCart('Carregador Sem Fio', 199, '🔌')">Adicionar ao Carrinho</button>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="imgs/Kit Gamer RGB.webp" alt=""></div>
+                <div class="product-description">Microfone USB Profissional para streaming e podcasts com cancelamento de ruído</div>
+                <div class="product-price">R$ 549,00</div>
+                <button class="add-to-cart" onclick="addToCart('Microfone USB Pro', 549, '🎤')">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal do Carrinho -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2 class="cart-title">Seu Carrinho</h2>
+                <button class="close-cart" onclick="toggleCart()">✕</button>
+            </div>
+            <div id="cartItems">
+                <div class="empty-cart">
+                    <p>Seu carrinho está vazio</p>
+                    <p>Adicione alguns produtos incríveis! 🛍️</p>
+                </div>
+            </div>
+            <div class="cart-total" id="cartTotal" style="display: none;">
+                <div class="total-price">Total: R$ <span id="totalAmount">0,00</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+
+        function addToCart(name, price, emoji) {
+            const existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: name,
+                    price: price,
+                    emoji: emoji,
+                    quantity: 1
+                });
+            }
+            
+            updateCartDisplay();
+            updateCartCount();
+            
+            // Feedback visual
+            event.target.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                event.target.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        function removeFromCart(name) {
+            cart = cart.filter(item => item.name !== name);
+            updateCartDisplay();
+            updateCartCount();
+        }
+
+        function updateQuantity(name, change) {
+            const item = cart.find(item => item.name === name);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(name);
+                } else {
+                    updateCartDisplay();
+                    updateCartCount();
+                }
+            }
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const totalAmount = document.getElementById('totalAmount');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <p>Seu carrinho está vazio</p>
+                        <p>Adicione alguns produtos incríveis! 🛍️</p>
+                    </div>
+                `;
+                cartTotal.style.display = 'none';
+            } else {
+                let total = 0;
+                cartItems.innerHTML = cart.map(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    return `
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <div class="cart-item-name">${item.emoji} ${item.name}</div>
+                                <div class="cart-item-price">R$ ${item.price.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                            </div>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="updateQuantity('${item.name}', -1)">-</button>
+                                <span class="quantity">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                            </div>
+                            <button class="remove-item" onclick="removeFromCart('${item.name}')">Remover</button>
+                        </div>
+                    `;
+                }).join('');
+                
+                totalAmount.textContent = total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                cartTotal.style.display = 'block';
+            }
+        }
+
+        function toggleCart() {
+            const cartModal = document.getElementById('cartModal');
+            cartModal.style.display = cartModal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Fechar carrinho clicando fora dele
+        document.getElementById('cartModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleCart();
+            }
+        });
+
+        // Fechar com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('cartModal').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

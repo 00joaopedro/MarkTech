@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bella Moda - Moda Feminina</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cart-icon {
+            position: relative;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .cart-icon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        .product-image .img{
+            width: auto;
+            height: 300px;
+        }
+
+        .product-image {
+            width: auto;
+            height: auto;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .product-size {
+            margin-bottom: 1rem;
+        }
+
+        .size-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .size-option {
+            padding: 0.5rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .size-option:hover, .size-option.selected {
+            border-color: #ff6b6b;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .cart-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-cart:hover {
+            color: #ff6b6b;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-total {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #eee;
+        }
+
+        .total-price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-btn {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .product-image {
+                height: 200px;
+                font-size: 3rem;
+            }
+
+            .cart-content {
+                padding: 1rem;
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .product-info {
+                padding: 1rem;
+            }
+
+            .size-options {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Bella Moda</div>
+                <button class="cart-icon" onclick="toggleCart()">
+                    🛒 Carrinho
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h1>Moda Feminina Exclusiva</h1>
+                <p>Descubra as últimas tendências e looks incríveis para todas as ocasiões</p>
+            </section>
+
+            <section class="products-grid">
+                <!-- Produto 1 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/vestido.webp" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Vestido Floral Elegante</h3>
+                        <p class="product-description">Vestido midi com estampa floral delicada, perfeito para ocasiões especiais. Tecido leve e confortável.</p>
+                        <div class="product-price">R$ 189,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Tamanho:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">P</div>
+                                <div class="size-option" onclick="selectSize(this)">M</div>
+                                <div class="size-option" onclick="selectSize(this)">G</div>
+                                <div class="size-option" onclick="selectSize(this)">GG</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Vestido Floral Elegante', 189.90, '👗')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 2 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/Blusa Branca feminina.webp" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Blusa Romântica Branca</h3>
+                        <p class="product-description">Blusa feminina com detalhes em renda e manga bufante. Ideal para looks românticos e casuais.</p>
+                        <div class="product-price">R$ 129,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Tamanho:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">P</div>
+                                <div class="size-option" onclick="selectSize(this)">M</div>
+                                <div class="size-option" onclick="selectSize(this)">G</div>
+                                <div class="size-option" onclick="selectSize(this)">GG</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Blusa Romântica Branca', 129.90, '👚')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 3 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/Calça Jeans Skinny feminina.jfif" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Calça Jeans Skinny</h3>
+                        <p class="product-description">Calça jeans de cintura alta com modelagem skinny. Denim premium com elastano para maior conforto.</p>
+                        <div class="product-price">R$ 159,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Tamanho:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">36</div>
+                                <div class="size-option" onclick="selectSize(this)">38</div>
+                                <div class="size-option" onclick="selectSize(this)">40</div>
+                                <div class="size-option" onclick="selectSize(this)">42</div>
+                                <div class="size-option" onclick="selectSize(this)">44</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Calça Jeans Skinny', 159.90, '👖')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 4 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/Scarpin Salto Alto.jfif" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Scarpin Salto Alto</h3>
+                        <p class="product-description">Scarpin clássico em couro sintético com salto de 10cm. Disponível em várias cores, elegante e versátil.</p>
+                        <div class="product-price">R$ 199,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Tamanho:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">35</div>
+                                <div class="size-option" onclick="selectSize(this)">36</div>
+                                <div class="size-option" onclick="selectSize(this)">37</div>
+                                <div class="size-option" onclick="selectSize(this)">38</div>
+                                <div class="size-option" onclick="selectSize(this)">39</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Scarpin Salto Alto', 199.90, '👠')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 5 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/Bolsa Transversal Luxo.jfif" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Bolsa Transversal Luxo</h3>
+                        <p class="product-description">Bolsa pequena transversal em couro sintético com detalhes dourados. Perfeita para o dia a dia.</p>
+                        <div class="product-price">R$ 149,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Cor:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">Preto</div>
+                                <div class="size-option" onclick="selectSize(this)">Bege</div>
+                                <div class="size-option" onclick="selectSize(this)">Marrom</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Bolsa Transversal Luxo', 149.90, '👜')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 6 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/Blazer Social Feminino.jfif" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Blazer Social Feminino</h3>
+                        <p class="product-description">Blazer estruturado para looks profissionais. Corte moderno e tecido de alta qualidade.</p>
+                        <div class="product-price">R$ 249,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Tamanho:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">P</div>
+                                <div class="size-option" onclick="selectSize(this)">M</div>
+                                <div class="size-option" onclick="selectSize(this)">G</div>
+                                <div class="size-option" onclick="selectSize(this)">GG</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Blazer Social Feminino', 249.90, '🧥')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 7 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/T-shirt Básica Premium feminina.jfif" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">T-shirt Básica Premium</h3>
+                        <p class="product-description">Camiseta básica em algodão 100% com corte feminino. Essencial para o guarda-roupa moderno.</p>
+                        <div class="product-price">R$ 79,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Tamanho:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">P</div>
+                                <div class="size-option" onclick="selectSize(this)">M</div>
+                                <div class="size-option" onclick="selectSize(this)">G</div>
+                                <div class="size-option" onclick="selectSize(this)">GG</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('T-shirt Básica Premium', 79.90, '👕')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 8 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/Short Jeans Destroyed.jfif" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Short Jeans Destroyed</h3>
+                        <p class="product-description">Short jeans com efeito destroyed e barra desfiada. Estilo despojado para o verão.</p>
+                        <div class="product-price">R$ 99,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Tamanho:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">36</div>
+                                <div class="size-option" onclick="selectSize(this)">38</div>
+                                <div class="size-option" onclick="selectSize(this)">40</div>
+                                <div class="size-option" onclick="selectSize(this)">42</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Short Jeans Destroyed', 99.90, '🩳')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 9 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/Sapatilha Confortável.jfif" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Sapatilha Confortável</h3>
+                        <p class="product-description">Sapatilha em couro sintético com palmilha acolchoada. Conforto e elegância para o dia a dia.</p>
+                        <div class="product-price">R$ 119,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Tamanho:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">35</div>
+                                <div class="size-option" onclick="selectSize(this)">36</div>
+                                <div class="size-option" onclick="selectSize(this)">37</div>
+                                <div class="size-option" onclick="selectSize(this)">38</div>
+                                <div class="size-option" onclick="selectSize(this)">39</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Sapatilha Confortável', 119.90, '🥿')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Produto 10 -->
+                <div class="product-card">
+                    <div class="product-image"><img class="img" src="imgs/Conjunto de Acessórios femininos.jfif" alt=""></div>
+                    <div class="product-info">
+                        <h3 class="product-title">Conjunto de Acessórios</h3>
+                        <p class="product-description">Kit com colar, brincos e pulseira dourados. Conjunto elegante para complementar seus looks.</p>
+                        <div class="product-price">R$ 89,90</div>
+                        <div class="product-size">
+                            <label class="size-label">Material:</label>
+                            <div class="size-options">
+                                <div class="size-option" onclick="selectSize(this)">Dourado</div>
+                                <div class="size-option" onclick="selectSize(this)">Prateado</div>
+                            </div>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Conjunto de Acessórios', 89.90, '🧤')">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Meu Carrinho</h2>
+                <button class="close-cart" onclick="toggleCart()">×</button>
+            </div>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <div class="total-price" id="totalPrice">R$ 0,00</div>
+                <button class="checkout-btn" onclick="checkout()">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let cartCount = 0;
+        let cartTotal = 0;
+
+        function selectSize(element) {
+            // Remove seleção anterior no mesmo produto
+            const sizeOptions = element.parentElement.querySelectorAll('.size-option');
+            sizeOptions.forEach(option => option.classList.remove('selected'));
+            
+            // Adiciona seleção ao elemento clicado
+            element.classList.add('selected');
+        }
+
+        function addToCart(name, price, emoji) {
+            // Verifica se um tamanho foi selecionado
+            const productCard = event.target.closest('.product-card');
+            const selectedSize = productCard.querySelector('.size-option.selected');
+            
+            if (!selectedSize) {
+                alert('Por favor, selecione um tamanho/cor antes de adicionar ao carrinho!');
+                return;
+            }
+
+            const size = selectedSize.textContent;
+            const item = {
+                name: name,
+                price: price,
+                emoji: emoji,
+                size: size,
+                id: Date.now() // ID único
+            };
+
+            cart.push(item);
+            cartCount++;
+            cartTotal += price;
+
+            updateCartUI();
+            
+            // Feedback visual
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Adicionado!';
+            button.style.background = 'linear-gradient(45deg, #4CAF50, #66BB6A)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = 'linear-gradient(45deg, #667eea, #764ba2)';
+            }, 1000);
+
+            // Remove seleção de tamanho após adicionar
+            selectedSize.classList.remove('selected');
+        }
+
+        function updateCartUI() {
+            document.getElementById('cartCount').textContent = cartCount;
+            
+            const cartItemsContainer = document.getElementById('cartItems');
+            const totalPriceElement = document.getElementById('totalPrice');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="empty-cart">Seu carrinho está vazio</div>';
+            } else {
+                cartItemsContainer.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div>
+                            <span style="font-size: 1.5rem; margin-right: 10px;">${item.emoji}</span>
+                            <strong>${item.name}</strong><br>
+                            <small>Tamanho: ${item.size}</small>
+                        </div>
+                        <div>
+                            <strong>R$ ${item.price.toFixed(2).replace('.', ',')}</strong>
+                            <button onclick="removeFromCart(${item.id})" style="margin-left: 10px; background: #ff4757; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">×</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            totalPriceElement.textContent = `R$ ${cartTotal.toFixed(2).replace('.', ',')}`;
+        }
+
+        function removeFromCart(itemId) {
+            const itemIndex = cart.findIndex(item => item.id === itemId);
+            if (itemIndex > -1) {
+                cartTotal -= cart[itemIndex].price;
+                cart.splice(itemIndex, 1);
+                cartCount--;
+                updateCartUI();
+            }
+        }
+
+        function toggleCart() {
+            const cartModal = document.getElementById('cartModal');
+            cartModal.style.display = cartModal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            
+            alert(`Pedido finalizado!\nTotal: R$ ${cartTotal.toFixed(2).replace('.', ',')}\n\nObrigada pela preferência! 💕`);
+            
+            // Limpa o carrinho
+            cart = [];
+            cartCount = 0;
+            cartTotal = 0;
+            updateCartUI();
+            toggleCart();
+        }
+
+        // Fecha o modal quando clicar fora dele
+        window.onclick = function(event) {
+            const cartModal = document.getElementById('cartModal');
+            if (event.target === cartModal) {
+                toggleCart();
+            }
+        }
+
+        // Inicializa a UI do carrinho
+        updateCartUI();
+    </script>
+</body>
+</html>
