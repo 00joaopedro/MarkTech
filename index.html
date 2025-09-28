@@ -293,11 +293,25 @@
             background: var(--white);
         }
 
-        .portfolio-grid img {
-  width: 300px;
-  height: 300px; /* mantém proporção */
-  display: block; /* remove espaços indesejados */
-}
+              .portfolio-grid img {
+        width: 300px;
+        height: 300px;
+        display: block;
+        border-radius: 10px; /* opcional: bordas arredondadas */
+        animation: pulseGlow 2s infinite ease-in-out; /* animação com brilho */
+        }
+
+        /* Animação de pulsar + glow */
+        @keyframes pulseGlow {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 5px cyan; /* brilho fraco dourado */
+        }
+        50% {
+            transform: scale(1.02);
+            box-shadow: 0 0 12px blue; /* brilho mais forte */
+        }
+        }
 
         .portfolio-grid {
             width: inherit;
@@ -760,4 +774,5 @@
     </script>
 </body>
 </html>
+
 
